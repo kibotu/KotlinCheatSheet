@@ -14,44 +14,44 @@ Let's get started.
 Extension functions
 Extension functions is amazing ability to "add methods" to existing classes, which you do not own and can not modify. Here is my favorite sample from Kotlin standard library.
 
-public inline fun Executor.execute(action: ()->Unit) {
-    execute(object: Runnable {
-        public override fun run() {
-            action()
-        }
-    })
-}
+	public inline fun Executor.execute(action: ()->Unit) {
+	    execute(object: Runnable {
+		public override fun run() {
+		    action()
+		}
+	    })
+	}
 We extend interface Executor defined in JDK with ability to execute not only Runnable but any given function literal like in the following example.
 
-executor execute {
-   println "I am function wrapped by Runnable and executed by Executor"
-} 
+	executor execute {
+	   println "I am function wrapped by Runnable and executed by Executor"
+	} 
 Please notice that in extension function we can use methods of the class we extend without mentioning this keyword. In our example we call Executor.execute(Runnable) 
 
 invoke-function convention
 By Kotlin convention any object which have method invoke can be called as if it was function. Our example above can be rewritten in even more interesting form.
 
-public inline fun Executor.invoke(action: ()->Unit) {
-    execute(runnable(action))
-}
+	public inline fun Executor.invoke(action: ()->Unit) {
+	    execute(runnable(action))
+	}
 
-executor {
-   println "I am function wrapped by Runnable and executed by Executor"
-}
+	executor {
+	   println "I am function wrapped by Runnable and executed by Executor"
+	}
 Default arguments
 Function parameters may have default values, which are used when a corresponding argument is omitted. This allows to reduce the number of overloads, compared to Java.
 
 In the following example we have function, which creates fixed thread pool, execute given action and shutdown the pool. 
 
-fun withFixedThreadPool(threadNum: Int = Runtime.getRuntime()!!.availableProcessors(), action: (Executor)->Unit) {
-    val myExecutor = Executors.newFixedThreadPool(threadNum)!!
-    try {
-        action(myExecutor)
-    }
-    finally {
-        myExecutor.shutdown()
-    }
-}
+	fun withFixedThreadPool(threadNum: Int = Runtime.getRuntime()!!.availableProcessors(), action: (Executor)->Unit) {
+	    val myExecutor = Executors.newFixedThreadPool(threadNum)!!
+	    try {
+		action(myExecutor)
+	    }
+	    finally {
+		myExecutor.shutdown()
+	    }
+	}
 We can either provide number of thread to create explicitly or use default value equal to number of available processors like in the example below.
 
     withFixedThreadPool { executor ->
@@ -62,29 +62,29 @@ We can either provide number of thread to create explicitly or use default value
 Named arguments
 When a function has many parameters (and many of them have defaults), it is very convenient to see parameter names at the call site. I love the following function from Kotlin standard library
 
-public fun thread(start: Boolean = true, daemon: Boolean = false, contextClassLoader: ClassLoader? = null, name: String? = null, priority: Int = -1, block: ()->Unit) : Thread {
-    val thread = object: Thread() {
-        public override fun run() {
-            block()
-        }
-    }
-    if(daemon)
-        thread.setDaemon(true)
-    if(priority > 0)
-        thread.setPriority(priority)
-    if(name != null)
-        thread.setName(name)
-    if(contextClassLoader != null)
-        thread.setContextClassLoader(contextClassLoader)
-    if(start)
-        thread.start()
-    return thread
-}
+	public fun thread(start: Boolean = true, daemon: Boolean = false, contextClassLoader: ClassLoader? = null, name: String? = null, priority: Int = -1, block: ()->Unit) : Thread {
+	    val thread = object: Thread() {
+		public override fun run() {
+		    block()
+		}
+	    }
+	    if(daemon)
+		thread.setDaemon(true)
+	    if(priority > 0)
+		thread.setPriority(priority)
+	    if(name != null)
+		thread.setName(name)
+	    if(contextClassLoader != null)
+		thread.setContextClassLoader(contextClassLoader)
+	    if(start)
+		thread.start()
+	    return thread
+	}
 It allows to create and fully customize thread with function literal. For example code snippet below will create and start daemon thread named "log poller"
 
-thread(daemon = true, name = "log poller") {
-   //  ..... whatever the thread has to do
-}
+	thread(daemon = true, name = "log poller") {
+	   //  ..... whatever the thread has to do
+	}
 Wrapping function literal
 Wrapping function literal is very convinient construction when you need to localize some variable in the scope. Let us consider following example
 
