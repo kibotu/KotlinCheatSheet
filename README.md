@@ -8,7 +8,13 @@ All the codes here can be copied and run on [Kotlin online editor](http://kotlin
 
 Let's get started.
 
+# #Browse offline
+
+You can download the entire reference documentation as a single [PDF file](http://kotlinlang.org/docs/kotlin-docs.pdf).
+
 ## Tricks
+
+https://dzone.com/articles/kotlin-action-few-tricks-every
 
 
 Extension functions
